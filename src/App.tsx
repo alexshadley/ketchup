@@ -1,7 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NameInput from "./NameInput";
 import { Person, CreatedPerson, Frequency } from "./constants";
+import { gql, useQuery } from "@apollo/client";
 
+const query = gql`
+  query {
+    allEmployees
+  }
+`;
 
 const App = () => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
@@ -30,14 +36,22 @@ const App = () => {
           <div className="text-center w-80 m-auto my-20 text-white">
             <div className="text-xl mb-4">How to use:</div>
             <p className="mb-4">
-              Set a reminder of when to catch up with your friends!! Add their email and set a time range to catch up in. No information provided here will leave our servers, to edit or remove yourself from our mailing list enter you and your friends email and select a new frequency.
+              Set a reminder of when to catch up with your friends!! Add their
+              email and set a time range to catch up in. No information provided
+              here will leave our servers, to edit or remove yourself from our
+              mailing list enter you and your friends email and select a new
+              frequency.
             </p>
             <p>(click anywhere to close)</p>
           </div>
         </div>
       )}
       <div>
-        <NameInput onSubmit={(person) => { console.log(person.email) }} />
+        <NameInput
+          onSubmit={(person) => {
+            console.log(person.email);
+          }}
+        />
       </div>
     </>
   );

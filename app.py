@@ -2,12 +2,14 @@
 
 from database import db_session, init_db
 from flask import Flask
+from flask_cors import CORS
 from schema import schema
 
 from flask_graphql import GraphQLView
 
 app = Flask(__name__)
 app.debug = True
+CORS(app)
 
 example_query = """
 {
@@ -32,7 +34,7 @@ example_query = """
 
 
 app.add_url_rule(
-    "/graphql", view_func=GraphQLView.as_view("graphql", schema=schema, graphiql=True)
+    "/", view_func=GraphQLView.as_view("graphql", schema=schema, graphiql=True)
 )
 
 
