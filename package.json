@@ -1,12 +1,20 @@
 {
   "scripts": {
     "start": "yarn concurrently \"yarn frontend\" \"python app.py\"",
-    "frontend": "yarn concurrently \"yarn node frontend.js\" \"yarn parcel watch src/index.html\"",
+    "frontend": "yarn concurrently \"yarn node frontend.js\" \"yarn parcel watch src/index.html --port 12345\"",
     "build": "parcel build src/index.html"
+  },
+  "name": "ketchup-main",
+  "description": "a really cool app",
+  "version": "1.0.0",
+  "engines": {
+    "yarn": "1.22"
   },
   "dependencies": {
     "@apollo/client": "^3.5.9",
     "axios": "^0.24.0",
+    "concurrently": "^7.0.0",
+    "csstype": "^2.6.2",
     "express": "^4.17.3",
     "express-http-proxy": "^1.6.3",
     "googleapis": "^92.0.0",
@@ -18,10 +26,10 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
-    "concurrently": "^7.0.0",
     "parcel": "^2.2.1",
     "postcss": "^8.4.6",
     "tailwindcss": "^3.0.23",
     "typescript": "^4.5.5"
-  }
+  },
+  "license": "UNLICENSED"
 }

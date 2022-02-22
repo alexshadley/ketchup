@@ -50,7 +50,7 @@ yarn start
 Heroku uses the `Procfile` in our root directory to know which processes to spin up on the deployment server. [Tutorial to learn more here](https://devcenter.heroku.com/articles/getting-started-with-python)
 ```
 brew install heroku/brew/heroku
-git remote add heroku https://git.heroku.com/ketchup-master.git
+git remote add heroku https://git.heroku.com/ketchup-main.git
 ```
 
 Test deployment locally:
@@ -60,5 +60,5 @@ heroku local
 
 To deploy (after committing your changes):
 ```
-git push heroku master
+git push heroku main
 ```
