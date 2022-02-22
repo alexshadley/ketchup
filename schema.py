@@ -12,7 +12,7 @@ class User(SQLAlchemyObjectType):
         interfaces = (relay.Node, )
 
     def resolve_friends():
-        
+        pass
 
 
 class Friend(SQLAlchemyObjectType):
@@ -22,6 +22,8 @@ class Friend(SQLAlchemyObjectType):
 
 
 class Query(graphene.ObjectType):
+    node = relay.Node.Field()
+
     def resolve_user(root, info, id):
         return UserModel.query(id=id)
 

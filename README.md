@@ -11,12 +11,12 @@ brew install yarn
 yarn
 ```
 
-Backend setup:
+Backend setup (note the dir is now `.venv` rather than `.env` due to collisions with Heroku):
 
 ```
 pip3 install virtualenv
-python3 -m virtualenv .env
-source .env/bin/activate
+python3 -m virtualenv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
