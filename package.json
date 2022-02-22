@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "yarn concurrently \"yarn frontend\" \"python app.py\"",
-    "frontend": "yarn concurrently \"yarn node frontend.js\" \"yarn parcel watch src/index.html\"",
+    "frontend": "yarn concurrently \"yarn node frontend.js\" \"yarn parcel watch src/index.html --port 12345\"",
     "build": "parcel build src/index.html"
   },
   "dependencies": {
@@ -23,5 +23,6 @@
     "postcss": "^8.4.6",
     "tailwindcss": "^3.0.23",
     "typescript": "^4.5.5"
-  }
+  },
+  "license": "UNLICENSED"
 }
