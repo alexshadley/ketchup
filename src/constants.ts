@@ -12,13 +12,13 @@ export type Person = {
 
 
 export enum Frequency {
-  Daily,
-  BiWeekly,
-  TriWeekly,
-  Weekly,
-  EveryOtherWeek,
-  Monthly,
-  EveryOtherMonth,
-  EverySixMonths,
-  Yearly
+  Daily = "Daily",
+  BiWeekly = "Bi-Weekly",
+  TriWeekly = "Tri-Weekly",
+  Weekly = "Weekly",
+  EveryOtherWeek = "Every other week",
+  Monthly = "Monthly",
+  EveryOtherMonth = "Every other month",
+  EverySixMonths = "Every six months",
+  Yearly = "Yearly"
 }
