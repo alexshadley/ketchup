@@ -3,16 +3,9 @@ from models import Friend as FriendModel
 
 import graphene
 from graphene import relay
-from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
+from graphene_sqlalchemy import SQLAlchemyObjectType
 
-
-class User(SQLAlchemyObjectType):
-    class Meta:
-        model = UserModel
-        interfaces = (relay.Node, )
-
-    def resolve_friends():
-        pass
+from util import localize_id
 
 
 class Friend(SQLAlchemyObjectType):
@@ -21,14 +14,29 @@ class Friend(SQLAlchemyObjectType):
         interfaces = (relay.Node, )
 
 
+class User(SQLAlchemyObjectType):
+    class Meta:
+        model = UserModel
+        interfaces = (relay.Node, )
+
+    hello = graphene.String()
+    def resolve_hello(self, info):
+        return 'world'
+
+    friends = graphene.List(Friend)
+    def resolve_friends(self, info):
+        return FriendModel.query.filter(FriendModel.user_id == self.id).all()
+
+
 class Query(graphene.ObjectType):
-    node = relay.Node.Field()
+    user = graphene.Field(User, email=graphene.String(required=True))
+    friend = graphene.Field(Friend, id=graphene.ID(required=True))
 
-    def resolve_user(root, info, id):
-        return UserModel.query(id=id)
-
+    def resolve_user(root, info, email):
+        return UserModel.query.filter(UserModel.email==email).one_or_none()
     def resolve_friend(root, info, id):
-        return FriendModel.query(id=id)
+        local_id = localize_id(id)
+        return FriendModel.query.filter(FriendModel.id==local_id).one_or_none()
 
 
 schema = graphene.Schema(query=Query)

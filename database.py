@@ -21,6 +21,7 @@ def init_db():
 
     alex = User(email="shadleyalex@gmail.com")
     db_session.add(alex)
+    db_session.commit()
     for name in ['Harry', 'Emilia', 'Trent']:
         db_session.add(Friend(user_id=alex.id, name=name))
 

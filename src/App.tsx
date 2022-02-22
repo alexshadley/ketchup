@@ -5,12 +5,21 @@ import { gql, useQuery } from "@apollo/client";
 
 const query = gql`
   query {
-    allEmployees
+    user(email: "shadleyalex@gmail.com") {
+      id
+      friends {
+        id
+        name
+      }
+    }
   }
 `;
 
 const App = () => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
+
+  const { data } = useQuery(query);
+  console.log(data);
 
   return (
     <>
