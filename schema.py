@@ -6,6 +6,7 @@ from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from util import localize_id
+from database import db_session
 
 
 class Friend(SQLAlchemyObjectType):
@@ -25,7 +26,22 @@ class User(SQLAlchemyObjectType):
 
     friends = graphene.List(Friend)
     def resolve_friends(self, info):
-        return FriendModel.query.filter(FriendModel.user_id == self.id).all()
+        return FriendModel.query.filter(FriendModel.user_email == self.email).all()
+
+
+class AddFriend(graphene.Mutation):
+    class Arguments:
+        user_email = graphene.String()
+        name = graphene.String()
+    
+    user = graphene.Field(User)
+
+    def mutate(root, info, user_email, name):
+        friend = FriendModel(user_email=user_email, name=name)
+        db_session.add(friend)
+        db_session.commit()
+
+        return dict(friend=UserModel.query.filter(UserModel.email==user_email).one_or_none())
 
 
 class Query(graphene.ObjectType):
@@ -39,4 +55,8 @@ class Query(graphene.ObjectType):
         return FriendModel.query.filter(FriendModel.id==local_id).one_or_none()
 
 
-schema = graphene.Schema(query=Query)
+class Mutation(graphene.ObjectType):
+    create_friend = AddFriend.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)

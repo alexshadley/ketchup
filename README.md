@@ -22,6 +22,8 @@ pip install -r requirements.txt
 
 ### DB setup
 
+Trent and Alex are using postgres 14.2, which seems to be working well.
+
 ```
 brew install postgres
 brew services start postgresql
@@ -35,8 +37,6 @@ CREATE DATABASE crm;
 \q
 ```
 
-Also go into database.py and change the username to your own. This part sucks but not a big priority rn.
-
 ### Testing Locally
 
 This command will run the frontend and backend at the same time, putting the logs for both in your console:
@@ -48,17 +48,20 @@ yarn start
 ### Deployment setup
 
 Heroku uses the `Procfile` in our root directory to know which processes to spin up on the deployment server. [Tutorial to learn more here](https://devcenter.heroku.com/articles/getting-started-with-python)
+
 ```
 brew install heroku/brew/heroku
 git remote add heroku https://git.heroku.com/ketchup-main.git
 ```
 
 Test deployment locally:
+
 ```
 heroku local
 ```
 
 To deploy (after committing your changes):
+
 ```
 git push heroku main
 ```

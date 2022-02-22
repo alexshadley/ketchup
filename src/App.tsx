@@ -2,24 +2,10 @@ import { useState } from "react";
 import NameInput from "./NameInput";
 import { Person, CreatedPerson, Frequency } from "./constants";
 import { gql, useQuery } from "@apollo/client";
-
-const query = gql`
-  query {
-    user(email: "shadleyalex@gmail.com") {
-      id
-      friends {
-        id
-        name
-      }
-    }
-  }
-`;
+import FriendList from "./FriendList";
 
 const App = () => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
-
-  const { data } = useQuery(query);
-  console.log(data);
 
   return (
     <>
@@ -36,6 +22,7 @@ const App = () => {
         <div className="text-center">
           Get a quick reminder to catch up with friends old and new.
         </div>
+        <FriendList userEmail="shadleyalex@gmail.com" />
       </div>
       {showInfo && (
         <div
