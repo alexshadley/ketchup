@@ -3,18 +3,18 @@ import ReactDOM from "react-dom";
 import App from "./App";
 
 const link = createHttpLink({
-  uri: '/graphql',
-  credentials: 'same-origin'
+    uri: '/graphql',
+    credentials: 'same-origin'
 });
 
 const client = new ApolloClient({
-  link: link,
-  cache: new InMemoryCache()
+    link: link,
+    cache: new InMemoryCache()
 });
 
 const app = document.getElementById("app");
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
-, app);
+    <ApolloProvider client={client}>
+        <App />
+    </ApolloProvider>
+    , app);
