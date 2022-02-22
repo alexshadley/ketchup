@@ -4,7 +4,7 @@ Ketchup with your friends
 
 ## Setup
 
-Frontend setup:
+### Frontend setup:
 
 ```
 brew install yarn
@@ -20,7 +20,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-DB setup:
+### DB setup
 
 ```
 brew install postgres
@@ -37,8 +37,28 @@ CREATE DATABASE crm;
 
 Also go into database.py and change the username to your own. This part sucks but not a big priority rn.
 
+### Testing Locally
+
 This command will run the frontend and backend at the same time, putting the logs for both in your console:
 
 ```
 yarn start
+```
+
+### Deployment setup
+
+Heroku uses the `Procfile` in our root directory to know which processes to spin up on the deployment server. [Tutorial to learn more here](https://devcenter.heroku.com/articles/getting-started-with-python)
+```
+brew install heroku/brew/heroku
+git remote add heroku https://git.heroku.com/ketchup-master.git
+```
+
+Test deployment locally:
+```
+heroku local
+```
+
+To deploy (after committing your changes):
+```
+git push heroku master
 ```
