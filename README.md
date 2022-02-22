@@ -9,7 +9,6 @@ Frontend setup:
 ```
 brew install yarn
 yarn
-yarn start
 ```
 
 Backend setup:
@@ -37,3 +36,9 @@ CREATE DATABASE crm;
 ```
 
 Also go into database.py and change the username to your own. This part sucks but not a big priority rn.
+
+This command will run the frontend and backend at the same time, putting the logs for both in your console:
+
+```
+yarn start
+```
