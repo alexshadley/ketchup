@@ -1,39 +1,32 @@
-from models import Department as DepartmentModel
-from models import Employee as EmployeeModel
-from models import Role as RoleModel
+from models import User as UserModel
+from models import Friend as FriendModel
 
 import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 
 
-class Department(SQLAlchemyObjectType):
+class User(SQLAlchemyObjectType):
     class Meta:
-        model = DepartmentModel
+        model = UserModel
         interfaces = (relay.Node, )
 
+    def resolve_friends():
+        
 
-class Employee(SQLAlchemyObjectType):
+
+class Friend(SQLAlchemyObjectType):
     class Meta:
-        model = EmployeeModel
-        interfaces = (relay.Node, )
-
-
-class Role(SQLAlchemyObjectType):
-    class Meta:
-        model = RoleModel
+        model = FriendModel
         interfaces = (relay.Node, )
 
 
 class Query(graphene.ObjectType):
-    node = relay.Node.Field()
-    # Allow only single column sorting
-    all_employees = SQLAlchemyConnectionField(
-        Employee.connection, sort=Employee.sort_argument())
-    # Allows sorting over multiple columns, by default over the primary key
-    all_roles = SQLAlchemyConnectionField(Role.connection)
-    # Disable sorting over this field
-    all_departments = SQLAlchemyConnectionField(Department.connection, sort=None)
+    def resolve_user(root, info, id):
+        return UserModel.query(id=id)
+
+    def resolve_friend(root, info, id):
+        return FriendModel.query(id=id)
 
 
 schema = graphene.Schema(query=Query)
