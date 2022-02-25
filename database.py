@@ -3,11 +3,15 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 import os
 
-# stupid hack: get username from environment, assume this is the db username as well
-mac_user = os.environ['USER']
 
-engine = create_engine(
-    f'postgresql://{mac_user}@localhost:5432/crm', convert_unicode=True)
+if 'DATABASE_URL' in os.environ:
+    db_uri = os.environ['DATABASE_URL']
+else:
+    # stupid hack: get username from environment, assume this is the db username as well
+    mac_user = os.environ['USER']
+    db_uri = f'postgresql://{mac_user}@localhost:5432/crm'
+
+engine = create_engine(db_uri, convert_unicode=True)
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
