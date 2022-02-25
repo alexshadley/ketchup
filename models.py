@@ -12,5 +12,5 @@ class User(Base):
 class Friend(Base):
     __tablename__ = 'friend'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_email = Column(Text, ForeignKey('users.email'))
     name = Column(Text)

@@ -5,7 +5,7 @@
     "build": "parcel build src/index.html",
     "prod-frontend": "yarn node frontend.js",
     "dev-frontend": "yarn concurrently \"yarn node frontend.js\" \"yarn parcel watch src/index.html --port 12345\"",
-    "prod-backend": "gunicorn app:app --bind=127.0.0.0:5000",
+    "prod-backend": "gunicorn app:app --bind=0.0.0.0:4321",
     "dev-backend": "python app.py"
   },
   "name": "ketchup-main",
