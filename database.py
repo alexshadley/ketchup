@@ -6,6 +6,9 @@ import os
 
 if 'DATABASE_URL' in os.environ:
     db_uri = os.environ['DATABASE_URL']
+
+    #  See: https://stackoverflow.com/questions/62688256/sqlalchemy-exc-nosuchmoduleerror-cant-load-plugin-sqlalchemy-dialectspostgre
+    db_uri = db_uri.replace("postgres://", "postgresql://", 1)
 else:
     # stupid hack: get username from environment, assume this is the db username as well
     mac_user = os.environ['USER']
