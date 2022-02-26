@@ -44,6 +44,23 @@ class AddFriend(graphene.Mutation):
         return dict(user=UserModel.query.filter(UserModel.email==user_email).one_or_none())
 
 
+class RemoveFriend(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+    
+    user = graphene.Field(User)
+
+    def mutate(root, info, id):
+        local_id = localize_id(id)
+
+        friend = FriendModel.query.filter_by(id=local_id).one_or_none()
+        user_email = friend.user_email
+        db_session.delete(friend)
+        db_session.commit()
+
+        return dict(user=UserModel.query.filter(UserModel.email==user_email).one_or_none())
+
+
 class Query(graphene.ObjectType):
     user = graphene.Field(User, email=graphene.String(required=True))
     friend = graphene.Field(Friend, id=graphene.ID(required=True))
@@ -56,7 +73,8 @@ class Query(graphene.ObjectType):
 
 
 class Mutation(graphene.ObjectType):
-    create_friend = AddFriend.Field()
+    add_friend = AddFriend.Field()
+    remove_friend = RemoveFriend.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

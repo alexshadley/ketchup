@@ -9,8 +9,14 @@ const App = () => {
 
   return (
     <>
-      <div className="mx-20 my-10 flex flex-col gap-12">
-        <div className="text-center text-3xl">
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <h2>
           Ketchup with Friends
           <span
             className="ml-4 cursor-pointer"
@@ -18,10 +24,10 @@ const App = () => {
           >
             ℹ️
           </span>
-        </div>
-        <div className="text-center">
+        </h2>
+        <h4 className="text-center">
           Get a quick reminder to catch up with friends old and new.
-        </div>
+        </h4>
         <FriendList userEmail="shadleyalex@gmail.com" />
       </div>
       {showInfo && (
@@ -42,13 +48,6 @@ const App = () => {
           </div>
         </div>
       )}
-      <div>
-        <NameInput
-          onSubmit={(person) => {
-            console.log(person.email);
-          }}
-        />
-      </div>
     </>
   );
 };

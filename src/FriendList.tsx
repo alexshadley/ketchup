@@ -1,7 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
-import Table from "./Table";
-import { Button } from "react-bootstrap";
+import { Button, Form, Table } from "react-bootstrap";
+import { Trash } from "react-bootstrap-icons";
 
 const query = gql`
   query FriendList($email: String!) {
@@ -17,7 +17,21 @@ const query = gql`
 
 const addFriendMutation = gql`
   mutation AddFriendMutation($userEmail: String!, $name: String!) {
-    createFriend(userEmail: $userEmail, name: $name) {
+    addFriend(userEmail: $userEmail, name: $name) {
+      user {
+        id
+        friends {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+const removeFriendMutation = gql`
+  mutation RemoveFriendMutation($id: ID!) {
+    removeFriend(id: $id) {
       user {
         id
         friends {
@@ -32,6 +46,7 @@ const addFriendMutation = gql`
 const FriendList = ({ userEmail }: { userEmail: string }) => {
   const [friendInput, setFriendInput] = useState("");
   const [addFriend] = useMutation(addFriendMutation);
+  const [removeFriend] = useMutation(removeFriendMutation);
 
   const { data } = useQuery(query, {
     variables: { email: userEmail },
@@ -52,13 +67,36 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <Table
-        headers={["Name", "Last outreach"]}
-        data={data.user.friends.map((f) => [f.name, "never"])}
-      />
-      <div className="flex gap-4">
-        <input
-          className="border rounded p-2"
+      <Table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Last outreach</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.user.friends.map((f) => (
+            <tr>
+              <td>{f.name}</td>
+              <td>never</td>
+              <td>
+                <Trash
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    removeFriend({
+                      variables: {
+                        id: f.id,
+                      },
+                    });
+                  }}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <div style={{ display: "flex", gap: "6px" }}>
+        <Form.Control
           onChange={(event) => setFriendInput(event.currentTarget.value)}
           value={friendInput}
         />

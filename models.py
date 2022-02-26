@@ -7,6 +7,7 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     email = Column(Text, unique=True)
+    frequency = Column(Text)
 
 
 class Friend(Base):
