@@ -65,3 +65,15 @@ To deploy (after committing your changes):
 ```
 git push heroku main
 ```
+
+Debugging issues with M1 Mac:
+
+- Symbol not found: _PQbackendPID
+    ```
+    Remove virtual env (if already created)
+    Open Rosetta terminal (if you don't know how, check this please https://www.courier.com/blog/tips-and-tricks-to-setup-your-apple-m1-for-development)
+    Go to your project folder
+    Create virtual env python3 -m venv venv
+    Use created virtual env source venv/bin/activate
+    Install binary package of psycopg2 pip install psycopg2-binary==2.9.2
+    ```
