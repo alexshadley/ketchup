@@ -1,6 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 import Table from "./Table";
+import { Button } from "react-bootstrap";
 
 const query = gql`
   query FriendList($email: String!) {
@@ -61,12 +62,7 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
           onChange={(event) => setFriendInput(event.currentTarget.value)}
           value={friendInput}
         />
-        <button
-          className="border rounded bg-green-400 p-1"
-          onClick={handleSubmit}
-        >
-          Add
-        </button>
+        <Button onClick={handleSubmit}>Add</Button>
       </div>
     </div>
   );

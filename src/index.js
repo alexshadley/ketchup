@@ -1,6 +1,7 @@
 import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import ReactDOM from "react-dom";
 import App from "./App";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const link = createHttpLink({
     uri: '/graphql',
