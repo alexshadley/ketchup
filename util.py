@@ -27,6 +27,18 @@ ADD_FRIEND = "{index}. {friend_name} \n"
 
 
 def format_email(users_name, list_of_friends):
+    """
+    format_email("Alex", ["Harry", "Trent"]) would yield:
+        Hello Alex,
+
+        Don't forget to reach out to the following friends!!!
+
+        1. Harry 
+        2. Trent 
+
+        From,
+        Team Ketchup 
+    """
     file = open('email_templates/default_email_template.txt', 'r')
     email_template = file.read()
     friends = ""
@@ -39,6 +51,3 @@ def format_email(users_name, list_of_friends):
 
     file.close()
     return email_template
-
-
-print(format_email("Alex", ["Harry", "Trent"]))

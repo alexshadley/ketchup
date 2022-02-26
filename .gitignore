@@ -2,6 +2,7 @@ node_modules
 .parcel-cache
 .cache
 .vscode
+.env
 *.pyc
 dist
 __pycache__/

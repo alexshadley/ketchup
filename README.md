@@ -77,3 +77,8 @@ Debugging issues with M1 Mac:
     Use created virtual env source venv/bin/activate
     Install binary package of psycopg2 pip install psycopg2-binary==2.9.2
     ```
+### Email
+
+We use [MailGun's](https://app.mailgun.com/app/dashboard) add-on to Heroku to send and receive emails via API call to the mail guns server.
+
+There's nuaince about who you can send emails to with sandbox vs prod accounts.

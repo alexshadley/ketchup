@@ -4,7 +4,6 @@ from database import db_session, init_db
 from flask import Flask
 from flask_cors import CORS
 from schema import schema
-from pathlib import Path
 from flask_graphql import GraphQLView
 
 app = Flask(__name__)
