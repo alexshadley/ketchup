@@ -20,11 +20,8 @@ class User(SQLAlchemyObjectType):
         model = UserModel
         interfaces = (relay.Node, )
 
-    hello = graphene.String()
-    def resolve_hello(self, info):
-        return 'world'
-
     friends = graphene.List(Friend)
+
     def resolve_friends(self, info):
         return FriendModel.query.filter(FriendModel.user_email == self.email).all()
 
@@ -33,15 +30,18 @@ class AddFriend(graphene.Mutation):
     class Arguments:
         user_email = graphene.String()
         name = graphene.String()
-    
+        frequency = graphene.String()
+        friend_details = graphene.String()
+
     user = graphene.Field(User)
 
-    def mutate(root, info, user_email, name):
-        friend = FriendModel(user_email=user_email, name=name)
+    def mutate(root, info, user_email, name, frequency, friend_details):
+        friend = FriendModel(user_email=user_email, name=name,
+                             frequency=frequency, friend_details=friend_details, is_friend_email_paused=False)
         db_session.add(friend)
         db_session.commit()
 
-        return dict(user=UserModel.query.filter(UserModel.email==user_email).one_or_none())
+        return dict(user=UserModel.query.filter(UserModel.email == user_email).one_or_none())
 
 
 class RemoveFriend(graphene.Mutation):
@@ -66,10 +66,11 @@ class Query(graphene.ObjectType):
     friend = graphene.Field(Friend, id=graphene.ID(required=True))
 
     def resolve_user(root, info, email):
-        return UserModel.query.filter(UserModel.email==email).one_or_none()
+        return UserModel.query.filter(UserModel.email == email).one_or_none()
+
     def resolve_friend(root, info, id):
         local_id = localize_id(id)
-        return FriendModel.query.filter(FriendModel.id==local_id).one_or_none()
+        return FriendModel.query.filter(FriendModel.id == local_id).one_or_none()
 
 
 class Mutation(graphene.ObjectType):

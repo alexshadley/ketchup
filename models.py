@@ -1,5 +1,6 @@
 from database import Base
-from sqlalchemy import Column, ForeignKey, Integer, String, Text
+from sqlalchemy import Column, ForeignKey, Integer, String, Text, DateTime, Boolean
+from sqlalchemy.sql import func
 from sqlalchemy.orm import backref, relationship
 
 
@@ -8,6 +9,8 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(Text, unique=True)
     frequency = Column(Text)
+    user_creation_datetime = Column(DateTime, server_default=func.now())
+    time_last_updated = Column(DateTime, onupdate=func.now())
 
 
 class Friend(Base):
@@ -15,3 +18,9 @@ class Friend(Base):
     id = Column(Integer, primary_key=True)
     user_email = Column(Text, ForeignKey('users.email'))
     name = Column(Text)
+    last_emailed_time = Column(DateTime)
+    time_last_updated = Column(DateTime, onupdate=func.now())
+    friend_creation_time = Column(DateTime, server_default=func.now())
+    frequency = Column(Text)
+    is_friend_email_paused = Column(Boolean)
+    friend_details = Column(Text)
