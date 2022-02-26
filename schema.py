@@ -41,7 +41,7 @@ class AddFriend(graphene.Mutation):
         db_session.add(friend)
         db_session.commit()
 
-        return dict(friend=UserModel.query.filter(UserModel.email==user_email).one_or_none())
+        return dict(user=UserModel.query.filter(UserModel.email==user_email).one_or_none())
 
 
 class Query(graphene.ObjectType):
