@@ -1,0 +1,7 @@
+Hello {users_name},
+
+Don't forget to reach out to the following friends!!!
+
+{friends}
+From,
+Team Ketchup 

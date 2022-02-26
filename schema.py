@@ -47,7 +47,7 @@ class AddFriend(graphene.Mutation):
 class RemoveFriend(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
-    
+
     user = graphene.Field(User)
 
     def mutate(root, info, id):
@@ -58,7 +58,7 @@ class RemoveFriend(graphene.Mutation):
         db_session.delete(friend)
         db_session.commit()
 
-        return dict(user=UserModel.query.filter(UserModel.email==user_email).one_or_none())
+        return dict(user=UserModel.query.filter(UserModel.email == user_email).one_or_none())
 
 
 class Query(graphene.ObjectType):

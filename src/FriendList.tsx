@@ -2,6 +2,8 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
+import { Person, CreatedPerson, Frequency } from "./constants";
+
 
 const query = gql`
   query FriendList($email: String!) {
@@ -16,8 +18,8 @@ const query = gql`
 `;
 
 const addFriendMutation = gql`
-  mutation AddFriendMutation($userEmail: String!, $name: String!) {
-    addFriend(userEmail: $userEmail, name: $name) {
+  mutation AddFriendMutation($userEmail: String!, $name: String!, $frequency: String!) {
+    addFriend(userEmail: $userEmail, name: $name, frequency: $frequency, friendDetails: "") {
       user {
         id
         friends {
@@ -47,6 +49,8 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
   const [friendInput, setFriendInput] = useState("");
   const [addFriend] = useMutation(addFriendMutation);
   const [removeFriend] = useMutation(removeFriendMutation);
+  const [frequency, setFrequency] = useState(Frequency.Weekly);
+
 
   const { data } = useQuery(query, {
     variables: { email: userEmail },
@@ -57,9 +61,18 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
       variables: {
         userEmail,
         name: friendInput,
+        frequency: frequency.toString(),
       },
     });
   };
+
+  function createListOfFrequencyOptions(options) {
+    let optionList = []
+    for (let val in options) {
+      optionList.push(<option value={val} label={options[val]}> {options[val]}</option >)
+    }
+    return (optionList);
+  }
 
   if (!data) {
     return null;
@@ -95,6 +108,12 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
           ))}
         </tbody>
       </Table>
+      <div style={{ display: "flex", gap: "10px" }}>
+
+        <select value={frequency} onChange={(event) => setFrequency(event.currentTarget.value as Frequency)}>
+          {createListOfFrequencyOptions(Frequency)}
+        </select>
+      </div>
       <div style={{ display: "flex", gap: "6px" }}>
         <Form.Control
           onChange={(event) => setFriendInput(event.currentTarget.value)}
