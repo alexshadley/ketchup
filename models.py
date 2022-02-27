@@ -8,7 +8,12 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     email = Column(Text, unique=True)
-    frequency = Column(Text)
+
+    # user settings
+    nudge_frequency = Column(Text, default="weekly")
+    outreach_frequency = Column(Text, default="monthly")
+
+    # metadata
     user_creation_datetime = Column(DateTime, server_default=func.now())
     time_last_updated = Column(DateTime, onupdate=func.now())
 

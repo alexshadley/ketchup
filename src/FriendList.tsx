@@ -64,6 +64,7 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
         frequency: frequency.toString(),
       },
     });
+    setFriendInput("");
   };
 
   function createListOfFrequencyOptions(options) {
@@ -80,6 +81,7 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
 
   return (
     <div className="flex flex-col items-center gap-2">
+      <h4>Friends</h4>
       <Table>
         <thead>
           <tr>
