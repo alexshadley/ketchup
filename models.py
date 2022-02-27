@@ -14,8 +14,7 @@ class User(Base):
     outreach_frequency = Column(Text, default="monthly")
 
     # metadata
-    user_creation_datetime = Column(DateTime, server_default=func.now())
-    time_last_updated = Column(DateTime, onupdate=func.now())
+    user_created_ts = Column(DateTime, server_default=func.now())
 
 
 class Friend(Base):

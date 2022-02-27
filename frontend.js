@@ -1,5 +1,5 @@
 const path = require('path')
-const proxy = require('express-http-proxy');
+const {createProxyMiddleware} = require('http-proxy-middleware');
 const express = require('express');
 const PORT = process.env.PORT || 1234
 
@@ -8,9 +8,9 @@ const app = express();
 console.log('server starting up')
 
 app.use(
-  "/graphql",
-  proxy(
-    "127.0.0.1:4321",
+  "/api",
+  createProxyMiddleware(
+    {target: "http://127.0.0.1:4321",}
   )
 );
 

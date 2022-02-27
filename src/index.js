@@ -4,7 +4,7 @@ import App from "./App";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const link = createHttpLink({
-    uri: '/graphql',
+    uri: '/api/graphql',
     credentials: 'same-origin'
 });
 
