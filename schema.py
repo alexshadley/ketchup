@@ -26,6 +26,23 @@ class User(SQLAlchemyObjectType):
         return FriendModel.query.filter(FriendModel.user_email == self.email).all()
 
 
+class CreateOrGetUser(graphene.Mutation):
+    class Arguments:
+        email = graphene.String()
+
+    user = graphene.Field(User)
+
+    def mutate(root, info, email):
+        user = UserModel.query.filter_by(email=email).one_or_none()
+        if user:
+            return dict(user=user)
+
+        new_user = UserModel(email=email)
+        db_session.add(new_user)
+        db_session.commit()
+
+        return dict(user=new_user)
+
 class AddFriend(graphene.Mutation):
     class Arguments:
         user_email = graphene.String()
@@ -91,6 +108,7 @@ class Query(graphene.ObjectType):
 
 
 class Mutation(graphene.ObjectType):
+    create_or_get_user = CreateOrGetUser.Field()
     add_friend = AddFriend.Field()
     remove_friend = RemoveFriend.Field()
     set_user_settings = SetUserSettings.Field()

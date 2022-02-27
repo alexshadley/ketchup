@@ -60,7 +60,7 @@ const UserSettings = ({ email }: { email: string }) => {
 
   return (
     <div>
-      <h4>Settings</h4>
+      <h4>Settings ({email})</h4>
       <Form.Label>Nudge Frequency</Form.Label>
       <DropdownButton title={settings.nudgeFrequency}>
         {Object.values(Frequency).map((f) => (
