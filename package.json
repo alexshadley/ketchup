@@ -6,7 +6,7 @@
     "prod-frontend": "yarn node frontend.js",
     "dev-frontend": "yarn concurrently \"yarn node frontend.js\" \"yarn parcel watch src/index.html --port 12345\"",
     "prod-backend": "gunicorn app:app --bind=0.0.0.0:4321",
-    "dev-backend": "python app.py"
+    "dev-backend": "python app.py --start-server --reset-db --test-populate"
   },
   "name": "ketchup-main",
   "description": "a really cool app",

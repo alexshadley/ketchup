@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
-from database import db_session, init_db
+from database import db_session, reset_db
 from flask import Flask
 from flask_cors import CORS
 from schema import schema
 from flask_graphql import GraphQLView
+import sys
+from pathlib import Path
 
 app = Flask(__name__)
 app.debug = True
@@ -20,5 +22,13 @@ def shutdown_session(exception=None):
 
 
 if __name__ == "__main__":
-    init_db()
-    app.run(port=4321)
+    assert len(
+        sys.argv) > 1, f"""Use one or more of:
+    --reset-db
+    --test-populate
+    --start-server
+    when calling {Path(__file__).name}"""
+    if "--reset-db" in sys.argv:
+        reset_db("--test-populate" in sys.argv)
+    if "--start-server" in sys.argv:
+        app.run(port=4321)

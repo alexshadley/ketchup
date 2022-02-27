@@ -37,6 +37,10 @@ CREATE DATABASE crm;
 \q
 ```
 
+While dev-ing, the DB will reset and update to match the tables and columns found in `models.py`.
+If there's helpful test data which should always be loaded, add it in `database.py`.  If you don't want the DB to reset on each run,
+you can remove the `--reset-db` flag from the calls to `app.py`.
+
 ### Testing Locally
 
 This command will run the frontend and backend at the same time, putting the logs for both in your console:
@@ -54,7 +58,7 @@ brew install heroku/brew/heroku
 git remote add heroku https://git.heroku.com/ketchup-main.git
 ```
 
-Test deployment locally:
+Test deployment locally (if you check out the `Procfile`, you can see the command called to start the web server):
 
 ```
 heroku local
