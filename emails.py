@@ -26,8 +26,11 @@ def send_simple_message(recipient, subject, body):
               "text": body})
 
 
-def create_route(email_post_route):
-    """Send a message to mailgun letting them know how to reply to emails it receives"""
+def route_mailgun_to_api(email_post_route):
+    """
+    Send a message to mailgun letting them know how to forward
+    emails they receive
+    """
     return requests.post(
         "https://api.mailgun.net/v3/routes",
         auth=("api", MAILGUN_API_KEY),
