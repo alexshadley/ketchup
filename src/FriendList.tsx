@@ -11,6 +11,7 @@ const query = gql`
       friends {
         id
         name
+        lastOutreachSent
       }
     }
   }
@@ -53,6 +54,18 @@ const removeFriendMutation = gql`
   }
 `;
 
+const addDays = (date: Date, days: number) => {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
+
+type Friend = {
+  id: string;
+  name: string;
+  lastOutreachSent: string | null;
+};
+
 const FriendList = ({ userEmail }: { userEmail: string }) => {
   const [friendInput, setFriendInput] = useState("");
   const [addFriend] = useMutation(addFriendMutation);
@@ -91,6 +104,46 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
     return null;
   }
 
+  const getOutreachDates = (friend: Friend) => {
+    if (friend.lastOutreachSent) {
+      const lastOutreach = friend.lastOutreachSent.split("T")[0];
+      const nextOutreach = addDays(new Date(friend.lastOutreachSent), 30);
+      return {
+        lastOutreach,
+        nextOutreach:
+          nextOutreach.getTime() - new Date().getTime() > 0
+            ? nextOutreach.toISOString().split("T")[0]
+            : "now!",
+      };
+    } else {
+      return { lastOutreach: "never", nextOutreach: "now!" };
+    }
+  };
+
+  const FriendRow = ({ friend }: { friend: Friend }) => {
+    const { lastOutreach, nextOutreach } = getOutreachDates(friend);
+
+    return (
+      <tr>
+        <td>{friend.name}</td>
+        <td>{lastOutreach}</td>
+        <td>{nextOutreach}</td>
+        <td>
+          <Trash
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              removeFriend({
+                variables: {
+                  id: friend.id,
+                },
+              });
+            }}
+          />
+        </td>
+      </tr>
+    );
+  };
+
   return (
     <div className="flex flex-col items-center gap-2">
       <h4>Friends</h4>
@@ -99,26 +152,12 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
           <tr>
             <th>Name</th>
             <th>Last outreach</th>
+            <th>Next outreach</th>
           </tr>
         </thead>
         <tbody>
           {data.user.friends.map((f) => (
-            <tr>
-              <td>{f.name}</td>
-              <td>never</td>
-              <td>
-                <Trash
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    removeFriend({
-                      variables: {
-                        id: f.id,
-                      },
-                    });
-                  }}
-                />
-              </td>
-            </tr>
+            <FriendRow friend={f as Friend} />
           ))}
         </tbody>
       </Table>
