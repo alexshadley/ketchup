@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -22,6 +23,10 @@ Base = declarative_base()
 Base.query = db_session.query_property()
 
 
+two_weeks_ago = datetime.now() - timedelta(days=14)
+six_weeks_ago = datetime.now() - timedelta(days=7*6)
+
+
 def reset_db(test_populate=True):
     # import all modules here that might define models so that
     # they will be registered properly on the metadata.  Otherwise
@@ -33,7 +38,8 @@ def reset_db(test_populate=True):
         alex = User(email="shadleyalex@gmail.com")
         db_session.add(alex)
         db_session.commit()
-        for name in ['Harry', 'Emilia', 'Trent']:
-            db_session.add(Friend(user_email=alex.email, name=name))
+        for name, last_outreach in [('Harry', two_weeks_ago), ('Emilia', six_weeks_ago), ('Trent', None)]:
+            db_session.add(Friend(user_email=alex.email,
+                           name=name, last_outreach_sent=last_outreach))
 
     db_session.commit()

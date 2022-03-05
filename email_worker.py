@@ -1,7 +1,26 @@
+from sqlalchemy import Integer
 from database import db_session
 from emails import send_simple_message
 from models import Friend, User
 from util import format_email
+from datetime import datetime
+
+
+frq_days = {
+    'daily': 1,
+    'weekly': 7,
+    'monthly': 30,
+    'quarterly': 90,
+}
+
+
+def should_nudge_for_friend(user, friend):
+    if not friend.last_outreach_sent:
+        return True
+
+    days_since_last_outreach = (
+        datetime.now() - friend.last_outreach_sent).days
+    return frq_days[user.outreach_frequency] < days_since_last_outreach
 
 
 def send_emails():
@@ -13,11 +32,13 @@ def send_emails():
     users = User.query.all()
 
     for user in users:
-        friends = Friend.query.filter_by(user_email=user.email).all()
+        friends = [f for f in Friend.query.filter_by(
+            user_email=user.email).all() if should_nudge_for_friend(user, f)]
 
         message = format_email(user.email, [f.name for f in friends])
         send_simple_message(user.email, 'Ketchup Time', message)
-        print(f'sent email to {user.email}')
+        print(
+            f'sent email to {user.email} for friends {[f.name for f in friends]}')
 
     print(f'Sent emails to {len(users)} users')
 
