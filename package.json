@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "yarn concurrently \"yarn dev-frontend\" \"yarn dev-backend\"",
-    "prod-start": "yarn concurrently \"yarn prod-frontend\" \"yarn prod-backend\" \"python app.py --reset-db --test-populate\"",
+    "prod-start": "python app.py --reset-db --test-populate; yarn concurrently \"yarn prod-frontend\" \"yarn prod-backend\";",
     "build": "parcel build src/index.html",
     "prod-frontend": "yarn node frontend.js",
     "dev-frontend": "yarn concurrently \"yarn node frontend.js\" \"yarn parcel watch src/index.html --port 12345\"",
