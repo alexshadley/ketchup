@@ -12,7 +12,7 @@ export type Person = {
 
 // for now we don't need all of these, cutting down
 export enum Frequency {
-  //Daily = "daily",
+  Daily = "daily",
   //BiWeekly = "bi_weekly",
   //TriWeekly = "tri_weekly",
   Weekly = "weekly",

@@ -12,6 +12,7 @@ class User(Base):
     # user settings
     nudge_frequency = Column(Text, default="weekly")
     outreach_frequency = Column(Text, default="monthly")
+    mark_outreach_automatically = Column(Boolean, default=False)
 
     # metadata
     user_created_ts = Column(DateTime, server_default=func.now())
@@ -22,7 +23,11 @@ class Friend(Base):
     id = Column(Integer, primary_key=True)
     user_email = Column(Text, ForeignKey('users.email'))
     name = Column(Text)
-    last_emailed_time = Column(DateTime)
+
+    # last time the user sent outreach
+    last_outreach_sent = Column(DateTime)
+
+    # unused
     time_last_updated = Column(DateTime, onupdate=func.now())
     friend_creation_time = Column(DateTime, server_default=func.now())
     frequency = Column(Text)
