@@ -13,6 +13,9 @@ frq_days = {
     'quarterly': 90,
 }
 
+# no more than this many friends per outreach
+OUTREACH_LIMIT = 3
+
 
 def should_nudge_for_friend(user, friend):
     if not friend.last_outreach_sent:
@@ -34,6 +37,9 @@ def send_emails():
     for user in users:
         friends = [f for f in Friend.query.filter_by(
             user_email=user.email).all() if should_nudge_for_friend(user, f)]
+
+        if len(friends) > OUTREACH_LIMIT:
+            friends = friends[:OUTREACH_LIMIT]
 
         message = format_email(user.email, [f.name for f in friends])
         send_simple_message(user.email, 'Ketchup Time', message)
