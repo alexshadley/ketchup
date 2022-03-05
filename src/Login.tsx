@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 
 const CREATE_OR_GET_USER_QUERY = gql`
@@ -14,9 +14,23 @@ const CREATE_OR_GET_USER_QUERY = gql`
   }
 `;
 
+const EMAIL_LOCAL_STORAGE_KEY = "ketchup-email";
+
 const Login = ({ onLogin }: { onLogin: (email: string) => void }) => {
   const [email, setEmail] = useState("");
   const [createOrGetUser] = useMutation(CREATE_OR_GET_USER_QUERY);
+
+  useEffect(() => {
+    if (localStorage.getItem(EMAIL_LOCAL_STORAGE_KEY) !== null) {
+      onLogin(localStorage.getItem(EMAIL_LOCAL_STORAGE_KEY));
+    }
+  }, []);
+
+  const handleLogin = async () => {
+    await createOrGetUser({ variables: { email } });
+    localStorage.setItem(EMAIL_LOCAL_STORAGE_KEY, email);
+    onLogin(email);
+  };
 
   return (
     <div
@@ -38,13 +52,7 @@ const Login = ({ onLogin }: { onLogin: (email: string) => void }) => {
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            createOrGetUser({
-              variables: {
-                email,
-              },
-            }).then(({ data }) => {
-              onLogin(data.createOrGetUser.user.email);
-            });
+            handleLogin();
           }
         }}
       />
