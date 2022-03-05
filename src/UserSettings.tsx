@@ -39,11 +39,6 @@ type Settings = {
   outreachFrequency: Frequency;
 };
 
-const DEFAULT_SETTINGS = {
-  nudgeFrequency: Frequency.Weekly,
-  outreachFrequency: Frequency.EveryOtherMonth,
-};
-
 const UserSettings = ({ email }: { email: string }) => {
   const { data } = useQuery(USER_QUERY, {
     variables: {

@@ -6,6 +6,7 @@ from util import format_email
 from datetime import datetime
 
 
+# keep in sync with constants.ts
 frq_days = {
     'daily': 1,
     'weekly': 7,

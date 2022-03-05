@@ -28,7 +28,7 @@ const App = () => {
                 marginTop: "30px",
               }}
             >
-              <FriendList userEmail={email} />
+              <FriendList email={email} />
               <UserSettings email={email} />
             </div>
           </div>

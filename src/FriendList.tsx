@@ -2,12 +2,13 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
-import { Frequency } from "./constants";
+import { Frequency, FRQ_DAYS } from "./constants";
 
 const query = gql`
   query FriendList($email: String!) {
     user(email: $email) {
       id
+      outreachFrequency
       friends {
         id
         name
@@ -66,20 +67,20 @@ type Friend = {
   lastOutreachSent: string | null;
 };
 
-const FriendList = ({ userEmail }: { userEmail: string }) => {
+const FriendList = ({ email }: { email: string }) => {
   const [friendInput, setFriendInput] = useState("");
   const [addFriend] = useMutation(addFriendMutation);
   const [removeFriend] = useMutation(removeFriendMutation);
   const [frequency, setFrequency] = useState(Frequency.Weekly);
 
   const { data } = useQuery(query, {
-    variables: { email: userEmail },
+    variables: { email },
   });
 
   const handleSubmit = () => {
     addFriend({
       variables: {
-        userEmail,
+        userEmail: email,
         name: friendInput,
         frequency: frequency.toString(),
       },
@@ -107,7 +108,10 @@ const FriendList = ({ userEmail }: { userEmail: string }) => {
   const getOutreachDates = (friend: Friend) => {
     if (friend.lastOutreachSent) {
       const lastOutreach = friend.lastOutreachSent.split("T")[0];
-      const nextOutreach = addDays(new Date(friend.lastOutreachSent), 30);
+      const nextOutreach = addDays(
+        new Date(friend.lastOutreachSent),
+        FRQ_DAYS[data.user.outreachFrequency]
+      );
       return {
         lastOutreach,
         nextOutreach:

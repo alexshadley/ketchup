@@ -10,6 +10,14 @@ export type Person = {
   eventId: string;
 };
 
+// keep in sync with email_worker.py
+export const FRQ_DAYS: Record<Frequency, number> = {
+  daily: 1,
+  weekly: 7,
+  monthly: 30,
+  quarterly: 90,
+};
+
 // for now we don't need all of these, cutting down
 export enum Frequency {
   Daily = "daily",
