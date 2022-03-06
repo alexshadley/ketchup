@@ -7,7 +7,7 @@ from schema import schema
 from flask_graphql import GraphQLView
 import sys
 from pathlib import Path
-from emails import route_mailgun_to_api
+from emails import route_mailgun_to_api, process_received_email_raw_data
 import json
 
 app = Flask(__name__)
@@ -20,7 +20,6 @@ app.add_url_rule(
 
 @app.route("/api/receive_email", methods=['POST'])
 def receive_email():
-    print(request.data)  # TODO delete this after seeing mailgun POST msg
     content_type = request.headers.get('Content-Type')
     if request.json is not None:
         data_dict = request.json
@@ -29,9 +28,10 @@ def receive_email():
     else:
         raise NotImplementedError(
             f"Don't know what to do with a call of type: {content_type}")
-    print("Received Email:", data_dict)
 
-    return Response(200)
+    process_received_email_raw_data(data_dict)
+
+    return ""  # The decorator will turn this into the body of a 200 response, so it doesn't matter what it is for the api
 
 
 @app.teardown_appcontext

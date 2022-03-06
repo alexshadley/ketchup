@@ -30,6 +30,9 @@ class Friend(Base):
     # last time a user responded with an update on this friend
     last_reached_out_to = Column(DateTime)
 
+    # Note most recently proviced by user on this friend
+    last_update_note = Column(Text)
+
     # unused
     time_last_updated = Column(DateTime, onupdate=func.now())
     friend_creation_time = Column(DateTime, server_default=func.now())

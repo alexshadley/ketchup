@@ -36,10 +36,14 @@ def reset_db(test_populate=True):
     Base.metadata.create_all(bind=engine)
     if test_populate:
         alex = User(email="shadleyalex@gmail.com")
-        db_session.add(alex)
+        trent = User(email="trpotter72@gmail.com")
+        db_session.add_all([alex, trent])
         db_session.commit()
         for name, last_outreach in [('Harry', two_weeks_ago), ('Emilia', six_weeks_ago), ('Trent', None)]:
             db_session.add(Friend(user_email=alex.email,
-                           name=name, last_outreach_sent=last_outreach))
+                                  name=name, last_outreach_sent=last_outreach))
+        for name, last_outreach in [('Harry', two_weeks_ago), ('Emilia', six_weeks_ago), ('Alex', None)]:
+            db_session.add(Friend(user_email=trent.email,
+                                  name=name, last_outreach_sent=last_outreach))
 
     db_session.commit()
