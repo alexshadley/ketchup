@@ -19,11 +19,11 @@ OUTREACH_LIMIT = 3
 
 
 def should_nudge_for_friend(user, friend):
-    if not friend.last_outreach_sent:
+    if not friend.last_notification_sent:
         return True
 
     days_since_last_outreach = (
-        datetime.now() - friend.last_outreach_sent).days
+        datetime.now() - friend.last_notification_sent).days
     return frq_days[user.outreach_frequency] < days_since_last_outreach
 
 

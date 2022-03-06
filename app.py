@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from database import db_session, reset_db
-from flask import Flask, request
+from flask import Flask, request, Response
 from flask_cors import CORS
 from schema import schema
 from flask_graphql import GraphQLView
@@ -31,6 +31,8 @@ def receive_email():
             f"Don't know what to do with a call of type: {content_type}")
     print("Received Email:", data_dict)
 
+    return Response(200)
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -50,4 +52,4 @@ if __name__ == "__main__":
         app.run(port=4321)
     if "--route-incoming-emails" in sys.argv:
         route_mailgun_to_api(
-            'https://ketchup-main.herokuapp.com/api/receive_email')
+            f'{DOMAIN_NAME}/api/receive_email')

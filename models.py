@@ -24,8 +24,11 @@ class Friend(Base):
     user_email = Column(Text, ForeignKey('users.email'))
     name = Column(Text)
 
-    # last time the user sent outreach
+    # last time the user was sent an outreach notification
     last_outreach_sent = Column(DateTime)
+
+    # last time a user responded with an update on this friend
+    last_reached_out_to = Column(DateTime)
 
     # unused
     time_last_updated = Column(DateTime, onupdate=func.now())
@@ -33,3 +36,13 @@ class Friend(Base):
     frequency = Column(Text)
     is_friend_email_paused = Column(Boolean)
     friend_details = Column(Text)
+
+
+class ReceivedEmail(Base):
+    __tablename__ = 'received_email'
+    id = Column(Integer, primary_key=True)
+    sender_address = Column(Text)
+    subject = Column(Text)
+    received_time = Column(DateTime)
+    simple_text = Column(Text)
+    full_body_html = Column(Text)
