@@ -24,11 +24,12 @@ def receive_email():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         data_dict = request.json
+    elif(content_type == 'multipart/form-data'):
+        data_dict = request.form
     else:
-        data_dict = json.loads(request.data)
-    print("Body", data_dict['body'])
-    print("Body without quotes", data_dict['body_without_quoted_text'])
-    print("Sender signature", data_dict['sender_signature'])
+        raise NotImplementedError(
+            f"Don't know what to do with a call of type: {content_type}")
+    print("Received Email:", data_dict)
 
 
 @app.teardown_appcontext
