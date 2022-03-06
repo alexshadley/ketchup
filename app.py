@@ -8,6 +8,7 @@ from flask_graphql import GraphQLView
 import sys
 from pathlib import Path
 from emails import route_mailgun_to_api
+import json
 
 app = Flask(__name__)
 app.debug = True
@@ -19,10 +20,15 @@ app.add_url_rule(
 
 @app.route("/api/receive_email", methods=['POST'])
 def receive_email():
-    email_data = request.get_json()
-    print("Body", email_data['body'])
-    print("Body without quotes", email_data['body_without_quoted_text'])
-    print("Sender signature", email_data['sender_signature'])
+    print(request.data)  # TODO delete this after seeing mailgun POST msg
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        data_dict = request.json
+    else:
+        data_dict = json.loads(request.data)
+    print("Body", data_dict['body'])
+    print("Body without quotes", data_dict['body_without_quoted_text'])
+    print("Sender signature", data_dict['sender_signature'])
 
 
 @app.teardown_appcontext
