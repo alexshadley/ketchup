@@ -14,7 +14,8 @@ const query = gql`
         id
         name
         lastOutreachSent
-        friendDetails
+        lastUpdateNote
+        timeLastUpdated
       }
     }
   }
@@ -37,6 +38,7 @@ const addFriendMutation = gql`
         friends {
           id
           name
+          timeLastUpdated
         }
       }
     }
@@ -57,21 +59,6 @@ const removeFriendMutation = gql`
   }
 `;
 
-const updateFriendDetailMutation = gql`
-  mutation UpdateFriendDetailMutation($id: ID! , $friendDetails: String!, $userEmail: String!) {
-    updateFriendDetail(id: $id, friendDetails: $friendDetails, userEmail: $userEmail) {
-      user {
-        id
-        friends {
-          id
-          name
-          friendDetails
-        }
-      }
-    }
-  }
-`;
-
 const addDays = (date: Date, days: number) => {
   var result = new Date(date);
   result.setDate(result.getDate() + days);
@@ -82,8 +69,8 @@ type Friend = {
   id: string;
   name: string;
   lastOutreachSent: string | null;
-  friendDetails: string;
-  show: boolean;
+  lastUpdateNote: string;
+  timeLastUpdated: string;
 };
 
 const FriendList = ({ email }: { email: string }) => {
@@ -113,21 +100,6 @@ const FriendList = ({ email }: { email: string }) => {
     });
     setFriendInput("");
   };
-
-
-
-  function createListOfFrequencyOptions(options) {
-    let optionList = [];
-    for (let val in options) {
-      optionList.push(
-        <option value={val} label={options[val]}>
-          {" "}
-          {options[val]}
-        </option>
-      );
-    }
-    return optionList;
-  }
 
   if (!data) {
     return null;
@@ -159,7 +131,7 @@ const FriendList = ({ email }: { email: string }) => {
         <td>{friend.name}</td>
         <td>{lastOutreach}</td>
         <td>{nextOutreach}</td>
-        <td>{friend.friendDetails}
+        <td>{friend.lastUpdateNote}
         </td>
         <td><button type="button" onClick={() => { setShow(true); setFriendTarget(friend.id) }}>
           Edit details
@@ -200,19 +172,8 @@ const FriendList = ({ email }: { email: string }) => {
           {data.user.friends.map((f) => (
             <FriendRow friend={f as Friend} />
           ))}
-          {/* {modalInput()} */}
         </tbody>
       </Table>
-      <div style={{ display: "flex", gap: "10px" }}>
-        <select
-          value={frequency}
-          onChange={(event) =>
-            setFrequency(event.currentTarget.value as Frequency)
-          }
-        >
-          {createListOfFrequencyOptions(Frequency)}
-        </select>
-      </div>
       <div style={{ display: "flex", gap: "6px" }}>
         <Form.Control
           onChange={(event) => setFriendInput(event.currentTarget.value)}

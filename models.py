@@ -32,9 +32,10 @@ class Friend(Base):
 
     # Note most recently proviced by user on this friend
     last_update_note = Column(Text)
+    # Time any part of this frind was updated.
+    time_last_updated = Column(DateTime, onupdate=func.now())
 
     # unused
-    time_last_updated = Column(DateTime, onupdate=func.now())
     friend_creation_time = Column(DateTime, server_default=func.now())
     frequency = Column(Text)
     is_friend_email_paused = Column(Boolean)

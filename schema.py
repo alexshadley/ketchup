@@ -47,16 +47,16 @@ class CreateOrGetUser(graphene.Mutation):
 class UpdateFriendDetail(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
-        friend_details = graphene.String()
+        last_update_note = graphene.String()
         user_email = graphene.String()
 
     user = graphene.Field(User)
 
-    def mutate(root, info, id, friend_details, user_email):
+    def mutate(root, info, id, last_update_note, user_email):
         local_id = localize_id(id)
 
         friend = FriendModel.query.filter_by(id=local_id).one_or_none()
-        friend.friend_details = friend_details
+        friend.last_update_note = last_update_note
         db_session.commit()
 
         return dict(user=UserModel.query.filter(UserModel.email == user_email).one_or_none())

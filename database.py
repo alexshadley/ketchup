@@ -41,9 +41,9 @@ def reset_db(test_populate=True):
         db_session.commit()
         for name, last_outreach in [('Harry', two_weeks_ago), ('Emilia', six_weeks_ago), ('Trent', None)]:
             db_session.add(Friend(user_email=alex.email,
-                                  name=name, last_outreach_sent=last_outreach, friend_details="Awesome friends!!"))
+                                  name=name, last_outreach_sent=last_outreach, last_update_note="Awesome friends!!"))
             db_session.add(Friend(user_email=alex.email,
-                                  name=name, last_outreach_sent=last_outreach, friend_details="Lame ass friends!!"))
+                                  name=name, last_outreach_sent=last_outreach, last_update_note="Lame ass friends!!"))
         for name, last_outreach in [('Harry', two_weeks_ago), ('Emilia', six_weeks_ago), ('Alex', None)]:
             db_session.add(Friend(user_email=trent.email,
                                   name=name, last_outreach_sent=last_outreach, friend_details="Kinda Awesome friends!!"))
