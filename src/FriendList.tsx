@@ -65,6 +65,11 @@ const addDays = (date: Date, days: number) => {
   return result;
 };
 
+const divNewLineStyle = {
+  width: '300px',
+  whiteSpace: 'pre-line'
+};
+
 type Friend = {
   id: string;
   name: string;
@@ -131,7 +136,7 @@ const FriendList = ({ email }: { email: string }) => {
         <td>{friend.name}</td>
         <td>{lastOutreach}</td>
         <td>{nextOutreach}</td>
-        <td>{friend.lastUpdateNote}
+        <td><div style={divNewLineStyle}>{friend.lastUpdateNote}</div>
         </td>
         <td><button type="button" onClick={() => { setShow(true); setFriendTarget(friend.id) }}>
           Edit details
