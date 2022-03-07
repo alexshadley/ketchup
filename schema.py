@@ -43,6 +43,25 @@ class CreateOrGetUser(graphene.Mutation):
 
         return dict(user=new_user)
 
+
+class UpdateFriendDetail(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+        friend_details = graphene.String()
+        user_email = graphene.String()
+
+    user = graphene.Field(User)
+
+    def mutate(root, info, id, friend_details, user_email):
+        local_id = localize_id(id)
+
+        friend = FriendModel.query.filter_by(id=local_id).one_or_none()
+        friend.friend_details = friend_details
+        db_session.commit()
+
+        return dict(user=UserModel.query.filter(UserModel.email == user_email).one_or_none())
+
+
 class AddFriend(graphene.Mutation):
     class Arguments:
         user_email = graphene.String()
@@ -83,7 +102,7 @@ class SetUserSettings(graphene.Mutation):
         email = graphene.String()
         nudge_frequency = graphene.String()
         outreach_frequency = graphene.String()
-    
+
     user = graphene.Field(User)
 
     def mutate(root, info, email, nudge_frequency, outreach_frequency):
@@ -112,6 +131,7 @@ class Mutation(graphene.ObjectType):
     add_friend = AddFriend.Field()
     remove_friend = RemoveFriend.Field()
     set_user_settings = SetUserSettings.Field()
+    update_friend_detail = UpdateFriendDetail.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

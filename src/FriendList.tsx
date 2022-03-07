@@ -1,8 +1,9 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
-import { Button, Form, Table } from "react-bootstrap";
+import { Button, Form, Table, Modal, InputGroup, FormControl } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import { Frequency, FRQ_DAYS } from "./constants";
+import ModalDetails from "./ModalDetails"
 
 const query = gql`
   query FriendList($email: String!) {
@@ -13,6 +14,7 @@ const query = gql`
         id
         name
         lastOutreachSent
+        friendDetails
       }
     }
   }
@@ -55,6 +57,21 @@ const removeFriendMutation = gql`
   }
 `;
 
+const updateFriendDetailMutation = gql`
+  mutation UpdateFriendDetailMutation($id: ID! , $friendDetails: String!, $userEmail: String!) {
+    updateFriendDetail(id: $id, friendDetails: $friendDetails, userEmail: $userEmail) {
+      user {
+        id
+        friends {
+          id
+          name
+          friendDetails
+        }
+      }
+    }
+  }
+`;
+
 const addDays = (date: Date, days: number) => {
   var result = new Date(date);
   result.setDate(result.getDate() + days);
@@ -65,6 +82,8 @@ type Friend = {
   id: string;
   name: string;
   lastOutreachSent: string | null;
+  friendDetails: string;
+  show: boolean;
 };
 
 const FriendList = ({ email }: { email: string }) => {
@@ -72,6 +91,13 @@ const FriendList = ({ email }: { email: string }) => {
   const [addFriend] = useMutation(addFriendMutation);
   const [removeFriend] = useMutation(removeFriendMutation);
   const [frequency, setFrequency] = useState(Frequency.Weekly);
+  const [show, setShow] = useState(false);
+  const [friendTarget, setFriendTarget] = useState("");
+
+  function modalFlip() {
+    setFriendTarget("");
+    setShow(!show);
+  }
 
   const { data } = useQuery(query, {
     variables: { email },
@@ -87,6 +113,8 @@ const FriendList = ({ email }: { email: string }) => {
     });
     setFriendInput("");
   };
+
+
 
   function createListOfFrequencyOptions(options) {
     let optionList = [];
@@ -126,12 +154,18 @@ const FriendList = ({ email }: { email: string }) => {
 
   const FriendRow = ({ friend }: { friend: Friend }) => {
     const { lastOutreach, nextOutreach } = getOutreachDates(friend);
-
     return (
       <tr>
         <td>{friend.name}</td>
         <td>{lastOutreach}</td>
         <td>{nextOutreach}</td>
+        <td>{friend.friendDetails}
+        </td>
+        <td><button type="button" onClick={() => { setShow(true); setFriendTarget(friend.id) }}>
+          Edit details
+              </button>
+
+        </td>
         <td>
           <Trash
             style={{ cursor: "pointer" }}
@@ -144,25 +178,29 @@ const FriendList = ({ email }: { email: string }) => {
             }}
           />
         </td>
-      </tr>
+      </tr >
     );
   };
 
   return (
     <div className="flex flex-col items-center gap-2">
       <h4>Friends</h4>
+      <ModalDetails data={data} email={email} show={show} flipModal={modalFlip} currentFriendTarget={friendTarget}></ModalDetails>
       <Table>
         <thead>
           <tr>
             <th>Name</th>
             <th>Last outreach</th>
             <th>Next outreach</th>
+            <th>Friend Details</th>
+            <th>Edit Friend Details</th>
           </tr>
         </thead>
         <tbody>
           {data.user.friends.map((f) => (
             <FriendRow friend={f as Friend} />
           ))}
+          {/* {modalInput()} */}
         </tbody>
       </Table>
       <div style={{ display: "flex", gap: "10px" }}>
@@ -182,7 +220,8 @@ const FriendList = ({ email }: { email: string }) => {
         />
         <Button onClick={handleSubmit}>Add</Button>
       </div>
-    </div>
+
+    </div >
   );
 };
 
