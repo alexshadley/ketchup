@@ -14,6 +14,7 @@ class User(Base):
     outreach_frequency = Column(Text, default="monthly")
     mark_outreach_automatically = Column(Boolean, default=False)
 
+    last_nudged = Column(DateTime)
     # metadata
     user_created_ts = Column(DateTime, server_default=func.now())
 
