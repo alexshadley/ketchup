@@ -13,6 +13,7 @@ class User(Base):
     nudge_frequency = Column(Text, default="weekly")
     outreach_frequency = Column(Text, default="monthly")
     mark_outreach_automatically = Column(Boolean, default=False)
+    friends_per_outreach = Column(Integer, default=3)
 
     last_nudged = Column(DateTime)
     # metadata

@@ -43,13 +43,13 @@ def send_emails():
         friends = [f for f in Friend.query.filter_by(
             user_email=user.email).all() if should_nudge_for_friend(user, f)]
 
-        if len(friends) > OUTREACH_LIMIT:
-            friends = friends[:OUTREACH_LIMIT]
+        friends_to_email = friends[:min(
+            len(friends), user.friends_per_outreach)]
 
-        message = format_email(user.email, [f.name for f in friends])
+        message = format_email(user.email, [f.name for f in friends_to_email])
         send_simple_message(user.email, 'Ketchup Time', message)
         print(
-            f'sent email to {user.email} for friends {[f.name for f in friends]}')
+            f'sent email to {user.email} for friends {[f.name for f in friends_to_email]}')
         user.last_nudged = datetime.now()
         db_session.add(user)
     db_session.commit()

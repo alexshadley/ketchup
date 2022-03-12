@@ -102,13 +102,15 @@ class SetUserSettings(graphene.Mutation):
         email = graphene.String()
         nudge_frequency = graphene.String()
         outreach_frequency = graphene.String()
+        friends_per_outreach = graphene.Int()
 
     user = graphene.Field(User)
 
-    def mutate(root, info, email, nudge_frequency, outreach_frequency):
+    def mutate(root, info, email, nudge_frequency, outreach_frequency, friends_per_outreach):
         user = UserModel.query.filter_by(email=email).one_or_none()
         user.nudge_frequency = nudge_frequency
         user.outreach_frequency = outreach_frequency
+        user.friends_per_outreach = friends_per_outreach
         db_session.commit()
 
         return dict(user=user)

@@ -7,7 +7,7 @@ from schema import schema
 from flask_graphql import GraphQLView
 import sys
 from pathlib import Path
-from emails import route_mailgun_to_api, process_received_email_raw_data
+from emails import DOMAIN_NAME, route_mailgun_to_api, process_received_email_raw_data
 import json
 
 app = Flask(__name__)
@@ -31,7 +31,7 @@ def receive_email():
 
     process_received_email_raw_data(data_dict)
 
-    return ""  # The decorator will turn this into the body of a 200 response, so it doesn't matter what it is for the api
+    return ""  # The decorator will turn this into the body of a 200 response
 
 
 @app.teardown_appcontext
