@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Table, Modal, InputGroup, FormControl } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import { Frequency, FRQ_DAYS } from "./constants";
@@ -90,10 +90,15 @@ const FriendList = ({ email }: { email: string }) => {
     setFriendTarget("");
     setShow(!show);
   }
-
-  const { data } = useQuery(query, {
+  const { data, refetch } = useQuery(query, {
     variables: { email },
   });
+
+  // On an email update, re-pull data from GraphQL
+  useEffect(() => {
+    console.log("refetching friends list on email update")
+    refetch({ email })
+  }, [email])
 
   const handleSubmit = () => {
     addFriend({
@@ -106,7 +111,7 @@ const FriendList = ({ email }: { email: string }) => {
     setFriendInput("");
   };
 
-  if (!data) {
+  if (!data || !data.user) {
     return null;
   }
 
@@ -138,10 +143,10 @@ const FriendList = ({ email }: { email: string }) => {
         <td>{nextOutreach}</td>
         <td><div style={divNewLineStyle}>{friend.lastUpdateNote}</div>
         </td>
-        <td><button type="button" onClick={() => { setShow(true); setFriendTarget(friend.id) }}>
-          Edit details
-              </button>
-
+        <td>
+          <button type="button" onClick={() => { setShow(true); setFriendTarget(friend.id) }}>
+            Edit details
+          </button>
         </td>
         <td>
           <Trash

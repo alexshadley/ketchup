@@ -8,7 +8,12 @@ const App = () => {
 
   return (
     <>
-      {email === null && <Login onLogin={(e) => setEmail(e)} />}
+      {email === null && <Login onLogin={(e) => {
+        console.log("top-level email: " + e);
+        setEmail(e)
+      }
+      }
+      />}
       {email !== null && (
         <>
           <div>

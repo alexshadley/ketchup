@@ -45,14 +45,18 @@ type Settings = {
 };
 
 const UserSettings = ({ email }: { email: string }) => {
-  const { data } = useQuery(USER_QUERY, {
+  const { data, refetch } = useQuery(USER_QUERY, {
     variables: {
       email,
     },
   });
+  useEffect(() => {
+    // On an email update, re-pull data from GraphQL
+    refetch({ email })
+  }, [email])
   const [setSettingsMutation] = useMutation(SET_SETTINGS_MUTATION);
 
-  if (!data) {
+  if (!data || !data.user) {
     return null;
   }
 
